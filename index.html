@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Синтетический motion-концепт — Absamad Manturov</title>
+  <style>
+    @font-face { font-family: "Segoe UI"; src: local("Segoe UI"); font-weight: 300 800; }
+    @font-face { font-family: "Consolas"; src: local("Consolas"); font-weight: 400 700; }
+
+    :root {
+      --paper: #f5f3ed;
+      --ink: #15211e;
+      --green: #0f7655;
+      --mint: #bfe8d4;
+      --orange: #f26b3b;
+      --line: rgba(21, 33, 30, .15);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--paper); }
+    body { font-family: "Segoe UI", sans-serif; color: var(--ink); }
+
+    #motion-banner {
+      position: relative;
+      width: 1440px;
+      height: 560px;
+      overflow: hidden;
+      isolation: isolate;
+      background: var(--paper);
+    }
+
+    .scene-content {
+      position: relative;
+      z-index: 4;
+      display: grid;
+      width: 100%;
+      height: 100%;
+      grid-template-columns: 1.22fr .78fr;
+      gap: 72px;
+      padding: 58px 78px 54px;
+    }
+
+    .left {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .meta-row, .proof-row, .cta-row {
+      display: flex;
+      align-items: center;
+    }
+
+    .meta-row { gap: 18px; }
+    .kicker, .frame-no, .proof-label, .proof-value, .card-index {
+      font-family: "Consolas", monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kicker {
+      padding: 9px 13px;
+      border: 1px solid var(--green);
+      border-radius: 999px;
+      color: var(--green);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .hairline { width: 132px; height: 1px; transform-origin: left center; background: var(--line); }
+    .frame-no { color: rgba(21, 33, 30, .74); font-size: 15px; letter-spacing: .08em; }
+
+    .headline {
+      max-width: 790px;
+      margin: 0;
+      font-size: 78px;
+      font-weight: 800;
+      line-height: .93;
+      letter-spacing: -.052em;
+    }
+
+    .headline .word { display: inline-block; will-change: transform, opacity; }
+    .headline .accent { color: var(--green); }
+
+    .subcopy {
+      max-width: 650px;
+      margin: 22px 0 0;
+      color: rgba(21, 33, 30, .68);
+      font-size: 23px;
+      font-weight: 300;
+      line-height: 1.42;
+    }
+
+    .bottom-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; }
+    .proof-row { gap: 30px; }
+    .proof { display: grid; gap: 4px; }
+    .proof-label { color: rgba(21, 33, 30, .74); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+    .proof-value { font-size: 18px; font-weight: 600; }
+
+    .cta-row {
+      min-width: 234px;
+      justify-content: space-between;
+      gap: 22px;
+      padding: 16px 18px 16px 22px;
+      border-radius: 14px;
+      color: #fffdf9;
+      background: var(--green);
+      font-size: 17px;
+      font-weight: 700;
+      box-shadow: 0 16px 35px rgba(15, 118, 85, .2);
+    }
+
+    .cta-arrow {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 10px;
+      color: var(--green);
+      background: var(--mint);
+      font-size: 22px;
+    }
+
+    .right { display: flex; min-width: 0; align-items: center; justify-content: center; }
+    .stack { position: relative; width: 100%; height: 410px; }
+
+    .signal-card {
+      position: absolute;
+      display: grid;
+      width: 390px;
+      height: 124px;
+      grid-template-columns: 58px 1fr 72px;
+      align-items: center;
+      gap: 18px;
+      padding: 18px 18px 18px 20px;
+      border: 1px solid rgba(21, 33, 30, .12);
+      border-radius: 24px;
+      background: rgba(255, 253, 249, .9);
+      box-shadow: 0 28px 60px rgba(24, 50, 77, .12);
+      will-change: transform, opacity;
+    }
+
+    .signal-card:nth-child(1) { top: 22px; left: 0; transform: rotate(-4deg); }
+    .signal-card:nth-child(2) { top: 143px; left: 56px; z-index: 2; transform: rotate(2.5deg); }
+    .signal-card:nth-child(3) { top: 264px; left: 4px; transform: rotate(-1.5deg); }
+    .card-index { font-size: 21px; font-weight: 600; color: var(--green); }
+    .card-copy { display: grid; gap: 5px; }
+    .card-copy strong { font-size: 25px; letter-spacing: -.03em; }
+    .card-copy span { color: rgba(21, 33, 30, .74); font-size: 16px; }
+
+    .card-glyph {
+      display: grid;
+      width: 58px;
+      height: 58px;
+      place-items: center;
+      border-radius: 18px;
+      background: var(--mint);
+    }
+
+    .card-glyph::before { content: ""; width: 22px; height: 22px; border: 3px solid var(--green); border-radius: 50%; }
+    .signal-card:nth-child(2) .card-glyph { background: #ffe0d1; }
+    .signal-card:nth-child(2) .card-glyph::before { border-radius: 5px; border-color: var(--orange); transform: rotate(45deg); }
+    .signal-card:nth-child(3) .card-glyph::before { width: 26px; height: 3px; border: 0; border-radius: 3px; background: var(--green); box-shadow: 0 -8px 0 var(--green), 0 8px 0 var(--green); }
+
+    .grid-bg {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      opacity: .38;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: linear-gradient(90deg, rgba(0,0,0,.3), transparent 46%, rgba(0,0,0,.9));
+    }
+
+    .mint-glow {
+      position: absolute;
+      z-index: 1;
+      top: -230px;
+      right: -70px;
+      width: 620px;
+      height: 620px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(191,232,212,.92), rgba(191,232,212,0) 68%);
+      will-change: transform, opacity;
+    }
+
+    .orange-orbit {
+      position: absolute;
+      z-index: 2;
+      right: 98px;
+      bottom: -208px;
+      width: 430px;
+      height: 430px;
+      border: 58px solid rgba(242, 107, 59, .12);
+      border-radius: 50%;
+      will-change: transform;
+    }
+
+    .edge-code {
+      position: absolute;
+      z-index: 3;
+      right: 30px;
+      bottom: 26px;
+      color: rgba(21, 33, 30, .74);
+      font: 500 12px/1 "Consolas", monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div id="motion-banner" data-composition-id="motion-banner" data-start="0" data-duration="8.5" data-track-index="0" data-width="1440" data-height="560">
+    <div class="grid-bg" data-layout-ignore></div>
+    <div class="mint-glow" data-layout-ignore></div>
+    <div class="orange-orbit" data-layout-ignore></div>
+
+    <div class="scene-content">
+      <section class="left">
+        <div class="meta-row">
+          <span class="kicker">Synthetic motion concept</span>
+          <span class="hairline"></span>
+          <span class="frame-no">01 / 04</span>
+        </div>
+
+        <div class="message">
+          <h1 class="headline">
+            <span class="word">Идея</span>
+            <span class="word accent">движется.</span>
+            <span class="word">Бренд остаётся.</span>
+          </h1>
+          <p class="subcopy">Один баннер — три смысловых акцента, единый ритм и действие, которое считывается без лишнего шума.</p>
+        </div>
+
+        <div class="bottom-row">
+          <div class="proof-row">
+            <div class="proof"><span class="proof-label">Формат</span><span class="proof-value">HTML5 / MP4</span></div>
+            <div class="proof"><span class="proof-label">Система</span><span class="proof-value">4 баннера</span></div>
+            <div class="proof"><span class="proof-label">Приёмка</span><span class="proof-value">1 концепт</span></div>
+          </div>
+          <div class="cta-row"><span>Смотреть проект</span><span class="cta-arrow">→</span></div>
+        </div>
+      </section>
+
+      <section class="right">
+        <div class="stack">
+          <article class="signal-card">
+            <span class="card-index">01</span>
+            <div class="card-copy"><strong>Смысл</strong><span>одна мысль за кадр</span></div>
+            <span class="card-glyph"></span>
+          </article>
+          <article class="signal-card">
+            <span class="card-index">02</span>
+            <div class="card-copy"><strong>Ритм</strong><span>движение ведёт взгляд</span></div>
+            <span class="card-glyph"></span>
+          </article>
+          <article class="signal-card">
+            <span class="card-index">03</span>
+            <div class="card-copy"><strong>Действие</strong><span>CTA завершает историю</span></div>
+            <span class="card-glyph"></span>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <div class="edge-code">AM / MOTION STUDY / 2026</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    window.__timelines = window.__timelines || {};
+    const tl = gsap.timeline({ paused: true });
+
+    tl.from('.grid-bg', { opacity: 0, duration: 1.15, ease: 'sine.out' }, 0.15);
+    tl.from('.mint-glow', { scale: .72, opacity: 0, duration: 1.45, ease: 'power2.out' }, 0.18);
+    tl.from('.orange-orbit', { scale: .58, rotation: -34, opacity: 0, duration: 1.1, ease: 'expo.out' }, 0.26);
+
+    tl.from('.kicker', { x: -34, opacity: 0, duration: .42, ease: 'power4.out' }, 0.28);
+    tl.from('.hairline', { scaleX: 0, duration: .68, ease: 'circ.out' }, 0.4);
+    tl.from('.frame-no', { opacity: 0, x: 22, duration: .52, ease: 'sine.out' }, 0.54);
+
+    tl.from('.headline .word:nth-child(1)', { y: 66, rotation: 2, opacity: 0, duration: .78, ease: 'expo.out' }, 0.52);
+    tl.from('.headline .word:nth-child(2)', { x: 54, opacity: 0, duration: .56, ease: 'power3.out' }, 0.72);
+    tl.from('.headline .word:nth-child(3)', { scale: .92, opacity: 0, duration: .88, ease: 'back.out(1.18)' }, 0.88);
+    tl.from('.subcopy', { y: 30, opacity: 0, duration: .58, ease: 'power2.out' }, 1.12);
+
+    tl.from('.signal-card:nth-child(1)', { x: 96, y: -24, rotation: 8, opacity: 0, duration: .66, ease: 'expo.out' }, 1.04);
+    tl.from('.signal-card:nth-child(2)', { scale: .78, rotation: -6, opacity: 0, duration: .82, ease: 'back.out(1.24)' }, 1.26);
+    tl.from('.signal-card:nth-child(3)', { x: 84, y: 32, rotation: 5, opacity: 0, duration: .54, ease: 'power4.out' }, 1.52);
+
+    tl.from('.proof', { y: 22, opacity: 0, duration: .48, stagger: .09, ease: 'circ.out' }, 1.78);
+    tl.from('.cta-row', { x: 44, opacity: 0, duration: .62, ease: 'expo.out' }, 2.02);
+    tl.from('.cta-arrow', { scale: .4, rotation: -40, opacity: 0, duration: .38, ease: 'back.out(1.8)' }, 2.24);
+    tl.from('.edge-code', { opacity: 0, x: 24, duration: .44, ease: 'sine.out' }, 2.38);
+
+    tl.to('.scene-content, .edge-code', { opacity: 0, y: -14, duration: .42, ease: 'power3.in' }, 7.82);
+    tl.to('.orange-orbit, .mint-glow', { opacity: 0, scale: 1.12, duration: .5, ease: 'power2.in' }, 7.9);
+
+    window.__timelines['motion-banner'] = tl;
+  </script>
+</body>
+</html>
